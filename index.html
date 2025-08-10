@@ -179,5 +179,66 @@
     <button onclick="emailSignUp()" style="width:100%; padding:0.8em; background:#222; color:white; border:none; border-radius:5px; cursor:pointer;">Sign Up with Email</button>
   </div>
 </div>
+  
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"></script>
+<script>
+  // Your Firebase config - replace with your actual config if needed
+  const firebaseConfig = {
+    apiKey: "AIzaSyBYAoJVCHxdkyWl5TF9RQautlCR-aSbD2k",
+    authDomain: "farikicars.firebaseapp.com",
+    projectId: "farikicars",
+    storageBucket: "farikicars.firebasestorage.app",
+    messagingSenderId: "178935050975",
+    appId: "1:178935050975:web:eac640391a77adb1b02f6a",
+    measurementId: "G-9LVM9ZQ5N5"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  function openPopup() {
+    document.getElementById("signUpPopup").style.display = "block";
+  }
+  function closePopup() {
+    document.getElementById("signUpPopup").style.display = "none";
+  }
+
+  function googleSignIn() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider)
+      .then(res => {
+        alert("Welcome " + res.user.displayName);
+        closePopup();
+      })
+      .catch(err => alert(err.message));
+  }
+
+  function phoneSignIn() {
+    let phone = prompt("Enter your phone number (with country code, e.g. +2126...)");
+    const appVerifier = new firebase.auth.RecaptchaVerifier('signUpPopup', { size: 'invisible' });
+    auth.signInWithPhoneNumber(phone, appVerifier)
+      .then(confirmationResult => {
+        let code = prompt("Enter the verification code sent to your phone");
+        return confirmationResult.confirm(code);
+      })
+      .then(res => {
+        alert("Welcome " + res.user.phoneNumber);
+        closePopup();
+      })
+      .catch(err => alert(err.message));
+  }
+
+  function emailSignUp() {
+    let email = document.getElementById("emailInput").value;
+    let pass = document.getElementById("emailPass").value;
+    auth.createUserWithEmailAndPassword(email, pass)
+      .then(res => {
+        alert("Account created for " + email);
+        closePopup();
+      })
+      .catch(err => alert(err.message));
+  }
+</script>
 </body>
 </html>
