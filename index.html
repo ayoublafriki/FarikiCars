@@ -259,6 +259,11 @@
       })
       .catch(err => alert(err.message));
   }
+  // post to details 
+  function goToDetail(name, year, price, image) {
+      const params = new URLSearchParams({ name, year, price, image });
+      window.location.href = `vehicle.html?${params.toString()}`;
+  }
 </script>
 </body>
 </html>
