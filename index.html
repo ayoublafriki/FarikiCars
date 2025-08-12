@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,13 +8,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/public/style/index.css">
   </head>
+
   <body>
 
     <header>
       <h2>FarikiCars.com</h2>
-      <button style="padding:8px 16px; font-weight:bold; cursor:pointer;">
-        Sign Up
-      </button>
+      <div id="user-info"></div>
+      <div>
+        <button style="padding:8px 16px; font-weight:bold; cursor:pointer;" id="sign-up-button">
+          Sign Up
+        </button>
+        <button style="padding:8px 16px; font-weight:bold; cursor:pointer;" id="sign-in-button">
+          Sign In
+        </button>
+      </div>
     </header>
 
     <section class="hero">
@@ -28,33 +36,33 @@
     <section class="featured">
       <h2>Featured Cars</h2>
       <div class="featured-cars">
-      
+
         <div class="car-card">
-        <img src="/public/images/tesla.jpg" alt="Tesla Model S">
-        <div class="car-info">
-          <h3>Tesla Model S</h3>
-          <p>2025 • $68,000</p>
+          <img src="/public/images/tesla.jpg" alt="Tesla Model S">
+          <div class="car-info">
+            <h3>Tesla Model S</h3>
+            <p>2025 • $68,000</p>
+          </div>
         </div>
+        <div class="car-card">
+          <img src="/public/images/bmw.jpg" alt="BMW X5">
+          <div class="car-info">
+            <h3>BMW X5</h3>
+            <p>2024 • $78,000</p>
+          </div>
         </div>
-          <div class="car-card">
-        <img src="/public/images/bmw.jpg" alt="BMW X5">
-        <div class="car-info">
-          <h3>BMW X5</h3>
-          <p>2024 • $78,000</p>
+
+
+        <div class="car-card">
+          <img src="/public/images/toyota.jpg" alt="Toyota Corolla">
+          <div class="car-info">
+            <h3>Toyota Corolla</h3>
+            <p>2022 • $18,000</p>
+          </div>
         </div>
+
       </div>
-        
-        
-      <div class="car-card">
-        <img src="/public/images/toyota.jpg" alt="Toyota Corolla">
-        <div class="car-info">
-          <h3>Toyota Corolla</h3>
-          <p>2022 • $18,000</p>
-        </div>
-      </div>
-          
-      </div>
-        </section>
+    </section>
 
     <section class="why">
       <h2>Why Choose Us</h2>
@@ -77,27 +85,18 @@
     <footer>
       <p>© 2025 FarikiCars.com | About | Contact | Terms</p>
     </footer>
-    
-  <div class="popup" id="signUpPopup" style="display:none; position:fixed; z-index:999; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5);">
-    <div style="background:white; padding:2em; border-radius:10px; max-width:400px; margin:5% auto; position:relative; box-shadow:0 5px 15px rgba(0,0,0,0.3);">
-      <span style="position:absolute; top:10px; right:15px; font-size:20px; cursor:pointer; color:#888;">&times;</span>
-      <h2 style="text-align:center; margin-top:0;">Create Your Account</h2>
 
-      <button style="width:100%; padding:0.8em; margin:0.5em 0; border:none; border-radius:5px; cursor:pointer; font-weight:bold; display:flex; align-items:center; justify-content:center; gap:8px; background:white; border:1px solid #ccc; color:#555;">
-        <img src="https://www.svgrepo.com/show/355037/google.svg" width="18" alt="Google Logo"> Sign up with Google
-      </button>
-
-      <button style="width:100%; padding:0.8em; margin:0.5em 0; border:none; border-radius:5px; cursor:pointer; font-weight:bold; display:flex; align-items:center; justify-content:center; gap:8px; background:#25D366; color:white;">
-        <img src="https://www.svgrepo.com/show/452133/whatsapp.svg" width="18" alt="WhatsApp Logo"> Sign up with Phone/WhatsApp
-      </button>
-
-      <hr style="margin:1em 0; border:none; border-top:1px solid #ccc;">
-
-      <input id="emailName" type="text" placeholder="Full Name" style="width:100%; padding:0.8em; margin:0.5em 0; border:1px solid #ccc; border-radius:5px;">
-      <input id="emailInput" type="email" placeholder="Email" style="width:100%; padding:0.8em; margin:0.5em 0; border:1px solid #ccc; border-radius:5px;">
-      <input id="emailPass" type="password" placeholder="Password" style="width:100%; padding:0.8em; margin:0.5em 0; border:1px solid #ccc; border-radius:5px;">
-      <button style="width:100%; padding:0.8em; background:#222; color:white; border:none; border-radius:5px; cursor:pointer;">Sign Up with Email</button>
+    <div id="auth-form-overlay" class="hidden">
+      <form id="auth-form">
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <button type="submit" id="sign-in-btn">Sign In</button>
+        <button type="button" id="sign-up-btn">Sign Up</button>
+      </form>
     </div>
-  </div>
+
+
+    <script src="/public/js/index.js" type="module"></script>
   </body>
+
 </html>

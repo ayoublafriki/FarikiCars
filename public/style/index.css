@@ -218,3 +218,88 @@ footer {
     font-size: 0.9em;
     text-align: center;
 }
+
+/* ---------------- */
+
+/* Overlay background to dim the page */
+#auth-form-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+
+    /* center the form */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Form container */
+#auth-form {
+    background: #ffffff;
+    padding: 2.5rem 3rem;
+    border-radius: 12px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Input fields */
+#auth-form input[type="email"],
+#auth-form input[type="password"] {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    transition: border-color 0.3s ease;
+}
+
+#auth-form input[type="email"]:focus,
+#auth-form input[type="password"]:focus {
+    border-color: #4a90e2;
+    outline: none;
+    box-shadow: 0 0 6px rgba(74, 144, 226, 0.5);
+}
+
+/* Buttons style */
+#auth-form button {
+    padding: 0.85rem;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 600;
+}
+
+/* Sign In button - primary */
+#sign-in-btn {
+    background-color: #4a90e2;
+    color: white;
+}
+
+#sign-in-btn:hover {
+    background-color: #357ABD;
+}
+
+/* Sign Up button - secondary */
+#sign-up-btn {
+    background-color: transparent;
+    color: #4a90e2;
+    border: 2px solid #4a90e2;
+}
+
+#sign-up-btn:hover {
+    background-color: #4a90e2;
+    color: white;
+}
+
+.hidden {
+    display: none !important;
+}
