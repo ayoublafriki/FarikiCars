@@ -128,16 +128,22 @@
   <section class="featured">
     <h2>Featured Cars</h2>
     <div class="featured-cars">
-      <div class="car-card">
-        <img src="images/tesla.jpg" alt="Tesla Model S">
-        <h3>2025 Tesla Model S</h3>
-        <p>Luxury electric sedan with cutting-edge tech.</p>
+     
+       <div class="car-card" onclick="goToDetail('Tesla Model S', '2025', '68000', 'tesla.jpg')">
+      <img src="images/tesla.jpg" alt="Tesla Model S">
+      <div class="car-info">
+        <h3>Tesla Model S</h3>
+        <p>2025 • $68,000</p>
       </div>
-      <div class="car-card">
-        <img src="images/bmw.jpg" alt="BMW X5">
-        <h3>2024 BMW X5</h3>
-        <p>Premium SUV for comfort and performance.</p>
+       </div>
+        <div class="car-card" onclick="goToDetail('BMW M4', '2021', '68000', 'bmw.jpg')">
+      <img src="images/bmw.jpg" alt="BMW X5">
+      <div class="car-info">
+        <h3>BMW X5</h3>
+        <p>2024 • $78,000</p>
       </div>
+    </div>
+      
        <div class="grid">
     <div class="car-card" onclick="goToDetail('Toyota Corolla', '2022', '18000', 'toyota.jpg')">
       <img src="images/toyota.jpg" alt="Toyota Corolla">
@@ -146,8 +152,9 @@
         <p>2022 • $18,000</p>
       </div>
     </div>
-         
-       </section>
+           </div>  
+          </div>
+      </section>
 
   <section class="why">
     <h2>Why Choose Us</h2>
