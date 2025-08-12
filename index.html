@@ -6,6 +6,16 @@
   <title>FarikiCars.com</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f5f5f5; }
+    header { background: #222; color: white; padding: 1em; text-align: center; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding: 20px; }
+    .car-card { background: white; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); overflow: hidden; cursor: pointer; transition: transform 0.2s; }
+    .car-card:hover { transform: scale(1.03); }
+    .car-card img { width: 100%; height: 180px; object-fit: cover; }
+    .car-info { padding: 15px; }
+    .car-info h3 { margin: 0; font-size: 1.2em; }
+    .car-info p { margin: 5px 0 0; color: gray; }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Roboto', sans-serif; background: #f8f9fa; color: #333; }
     a { text-decoration: none; color: inherit; }
