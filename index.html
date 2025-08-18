@@ -135,7 +135,6 @@
       position: relative;
       color: white;
     }
-    .card h1 { margin: 0 0 12px; font-size: 30px; }
     .muted { color: #94a3b8; font-size: 14px; margin: 14px 0 22px; }
     .btn { width: 100%; padding: 16px; border-radius: 16px; font-weight: 600; cursor: pointer; border: none; }
     .btn.google { background: #4285F4; color: #fff; }
@@ -317,28 +316,7 @@
   <section class="featured">
     <h2>Featured Cars</h2>
     <div class="featured-cars">
-      <div class="car-card" onclick="goToDetail('Tesla Model S', '2025', '68000', 'https://source.unsplash.com/400x220/?tesla')">
-        <img src="images/tesla.jpg" alt="Tesla Model S">
-        <div class="car-info">
-          <h3>Tesla Model S</h3>
-          <p>2025 • $68,000</p>
-        </div>
       </div>
-      <div class="car-card" onclick="goToDetail('BMW X5', '2024', '78000', 'https://source.unsplash.com/400x220/?bmw')">
-        <img src="images/bmw.jpg" alt="BMW X5">
-        <div class="car-info">
-          <h3>BMW X5</h3>
-          <p>2024 • $78,000</p>
-        </div>
-      </div>
-      <div class="car-card" onclick="goToDetail('Toyota Corolla', '2022', '18000', 'https://source.unsplash.com/400x220/?toyota')">
-        <img src="images/toyota.jpg" alt="Toyota Corolla">
-        <div class="car-info">
-          <h3>Toyota Corolla</h3>
-          <p>2022 • $18,000</p>
-        </div>
-      </div>
-    </div>
   </section>
   <section class="why">
     <h2>Why Choose Us</h2>
@@ -558,6 +536,38 @@
     searchInput.addEventListener("input", filterCars);
     yearFilter.addEventListener("change", filterCars);
     priceFilter.addEventListener("change", filterCars);
+
+    function displayFeaturedCars() {
+      const featuredContainer = document.querySelector('.featured-cars');
+      const inventoryCars = document.querySelectorAll('.inventory .car-card-inv');
+      
+      featuredContainer.innerHTML = ''; // Clear existing content
+
+      inventoryCars.forEach(car => {
+        const make = car.dataset.make;
+        const model = car.dataset.model;
+        const year = car.dataset.year;
+        const price = car.dataset.price;
+        const image = car.querySelector('img').getAttribute('src');
+
+        const carName = `${year} ${make} ${model}`;
+        const carPriceFormatted = `$${parseInt(price).toLocaleString()}`;
+        
+        const cardHTML = `
+          <div class="car-card" onclick="goToDetail('${carName}', '${year}', '${carPriceFormatted}', '${image}')">
+            <img src="${image}" alt="${carName}">
+            <div class="car-info">
+              <h3>${carName}</h3>
+              <p>${year} • ${carPriceFormatted}</p>
+            </div>
+          </div>
+        `;
+        featuredContainer.innerHTML += cardHTML;
+      });
+    }
+
+    // Call this function when the page loads
+    window.onload = displayFeaturedCars;
   </script>
 </body>
 </html>
