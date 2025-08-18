@@ -5,11 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FarikiCars.com</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary: #2563eb;
+      --secondary: #1e3a8a;
+      --bg-light: #f4f6f9;
+      --card-shadow: rgba(0,0,0,0.08);
+      --card-hover-shadow: rgba(0,0,0,0.15);
+      --transition-speed: 0.3s;
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Roboto', sans-serif; background: #f8f9fa; color: #333; }
+    body { font-family: 'Roboto', 'Inter', sans-serif; background: #f8f9fa; color: #333; }
     a { text-decoration: none; color: inherit; }
-
     header {
       background: #111;
       color: white;
@@ -36,9 +44,8 @@
       cursor: pointer;
       display: none;
     }
-
     .hero {
-      background: url('car-banner.jpg') center/cover no-repeat;
+      background: url('https://source.unsplash.com/1600x900/?car-banner') center/cover no-repeat;
       color: white;
       text-align: center;
       padding: 8em 2em 5em;
@@ -59,9 +66,7 @@
       transition: background 0.3s;
     }
     .cta-buttons button:hover { background: #e09e00; }
-
     section { padding: 3em 5%; text-align: center; }
-
     .featured-cars {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -80,13 +85,10 @@
     .car-card img { width: 100%; height: 160px; object-fit: cover; }
     .car-card h3 { margin: 1em; font-size: 1.2em; }
     .car-card p { margin: 0 1em 1em; color: #666; font-size: 0.9em; }
-
     .why { background: #fff; padding: 3em 5%; }
     .why p { font-size: 1.1em; margin-top: 1em; }
-
     .testimonials { background: #f1f1f1; padding: 3em 5%; }
     .testimonials p { font-style: italic; font-size: 1.1em; margin-top: 1em; }
-
     .newsletter input {
       padding: 0.8em;
       width: 250px;
@@ -104,7 +106,6 @@
       cursor: pointer;
     }
     .newsletter button:hover { background: #e09e00; }
-
     footer {
       background: #111;
       color: white;
@@ -112,7 +113,6 @@
       font-size: 0.9em;
       text-align: center;
     }
-
     /* Modal */
     .modal-overlay {
       position: fixed;
@@ -141,7 +141,6 @@
     .btn.google { background: #4285F4; color: #fff; }
     .btn.google:hover { background: #357ae8; }
     .close-btn { position: absolute; top: 16px; right: 16px; font-size: 24px; color: #fff; background: none; border: none; cursor: pointer; }
-
     /* Toast */
     #toast {
       position: fixed;
@@ -156,10 +155,149 @@
       box-shadow: 0 8px 24px rgba(0,0,0,0.4);
       z-index: 3000;
     }
+
+    /* Inventory Modal styles */
+    .modal { 
+      display: none; 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      background: rgba(0,0,0,0.5); 
+      justify-content: center; 
+      align-items: center; 
+      padding: 1rem; 
+      z-index: 100; 
+    }
+    .modal-content { 
+      background: white; 
+      border-radius: 20px; 
+      max-width: 1400px; 
+      width: 100%; 
+      max-height: 90vh; 
+      overflow-y: auto; 
+      padding: 1rem; 
+      position: relative; 
+    }
+    .close-btn-inventory { 
+      position: absolute; 
+      top: 1rem; 
+      right: 1rem; 
+      background: var(--primary); 
+      color: white; 
+      border: none; 
+      border-radius: 50%; 
+      width: 32px; 
+      height: 32px; 
+      font-size: 1.2rem; 
+      cursor: pointer; 
+      line-height: 0; 
+    }
+    .search-filter { 
+      display: flex; 
+      gap: 1rem; 
+      padding: 1rem; 
+      background: white; 
+      flex-wrap: wrap; 
+      border-radius: 12px; 
+      margin-bottom: 1rem; 
+    }
+    .search-filter input, .search-filter select { 
+      padding: 0.8rem 1.2rem; 
+      border: 1px solid #ddd; 
+      border-radius: 12px; 
+      flex: 1; 
+      font-size: 1rem; 
+    }
+    .inventory { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+      gap: 2rem; 
+    }
+    .car-card-inv { 
+      background: white; 
+      border-radius: 20px; 
+      overflow: hidden; 
+      box-shadow: 0 4px 12px var(--card-shadow); 
+      transition: transform var(--transition-speed), box-shadow var(--transition-speed); 
+      display: flex; 
+      flex-direction: column; 
+      cursor: pointer; 
+    }
+    .car-card-inv:hover { 
+      transform: translateY(-8px); 
+      box-shadow: 0 12px 24px var(--card-hover-shadow); 
+    }
+    .car-card-inv img { 
+      width: 100%; 
+      height: 220px; 
+      object-fit: cover; 
+      transition: transform var(--transition-speed); 
+    }
+    .car-card-inv:hover img { 
+      transform: scale(1.05); 
+    }
+    .car-info-inv { 
+      padding: 1.5rem; 
+      flex-grow: 1; 
+      display: flex; 
+      flex-direction: column; 
+      justify-content: space-between; 
+    }
+    .car-info-inv h3 { 
+      margin-bottom: 0.5rem; 
+      font-size: 1.2rem; 
+      font-weight: 600; 
+      color: var(--secondary); 
+    }
+    .car-info-inv p { 
+      margin: 0.3rem 0; 
+      font-size: 0.95rem; 
+      color: #555; 
+    }
+    .price { 
+      font-weight: 700; 
+      color: var(--primary); 
+      margin-top: 0.8rem; 
+      font-size: 1.1rem; 
+    }
+    .btn-group { 
+      display: flex; 
+      gap: 0.5rem; 
+      margin-top: 1rem; 
+    }
+    .view-btn, .whatsapp-btn { 
+      flex: 1; 
+      padding: 0.7rem 1.2rem; 
+      text-align: center; 
+      color: white; 
+      border-radius: 10px; 
+      font-weight: 600; 
+      font-size: 0.95rem; 
+      text-decoration: none; 
+      transition: all var(--transition-speed); 
+    }
+    .view-btn { 
+      background: var(--primary); 
+    }
+    .view-btn:hover { 
+      background: var(--secondary); 
+    }
+    .whatsapp-btn { 
+      background: #25D366; 
+    }
+    .whatsapp-btn:hover { 
+      background: #1ebe5d; 
+    }
+    @media (max-width: 600px) { 
+      .search-filter { flex-direction: column; } 
+      header h1 { font-size: 1.5rem; } 
+      .btn-group { flex-direction: column; } 
+    }
   </style>
 </head>
 <body>
-
   <header>
     <h2>FarikiCars.com</h2>
     <div>
@@ -168,35 +306,33 @@
       <button id="logoutBtn">Logout</button>
     </div>
   </header>
-
   <section class="hero">
     <h1>Drive Your Dream</h1>
     <p>Discover it at FarikiCars</p>
     <div class="cta-buttons">
-      <button>Browse Inventory</button>
+      <button id="browseInventoryBtn">Browse Inventory</button>
       <button>Sell Your Car</button>
     </div>
   </section>
-
   <section class="featured">
     <h2>Featured Cars</h2>
     <div class="featured-cars">
-      <div class="car-card" onclick="goToDetail('Tesla Model S', '2025', '68000', 'tesla.jpg')">
-        <img src="images/tesla.jpg" alt="Tesla Model S">
+      <div class="car-card" onclick="goToDetail('Tesla Model S', '2025', '68000', 'https://source.unsplash.com/400x220/?tesla')">
+        <img src="https://source.unsplash.com/400x220/?tesla" alt="Tesla Model S">
         <div class="car-info">
           <h3>Tesla Model S</h3>
           <p>2025 • $68,000</p>
         </div>
       </div>
-      <div class="car-card" onclick="goToDetail('BMW X5', '2024', '78000', 'bmw.jpg')">
-        <img src="images/bmw.jpg" alt="BMW X5">
+      <div class="car-card" onclick="goToDetail('BMW X5', '2024', '78000', 'https://source.unsplash.com/400x220/?bmw')">
+        <img src="https://source.unsplash.com/400x220/?bmw" alt="BMW X5">
         <div class="car-info">
           <h3>BMW X5</h3>
           <p>2024 • $78,000</p>
         </div>
       </div>
-      <div class="car-card" onclick="goToDetail('Toyota Corolla', '2022', '18000', 'toyota.jpg')">
-        <img src="images/toyota.jpg" alt="Toyota Corolla">
+      <div class="car-card" onclick="goToDetail('Toyota Corolla', '2022', '18000', 'https://source.unsplash.com/400x220/?toyota')">
+        <img src="https://source.unsplash.com/400x220/?toyota" alt="Toyota Corolla">
         <div class="car-info">
           <h3>Toyota Corolla</h3>
           <p>2022 • $18,000</p>
@@ -204,17 +340,14 @@
       </div>
     </div>
   </section>
-
   <section class="why">
     <h2>Why Choose Us</h2>
     <p>Trusted Dealers • Easy Financing • Nationwide Delivery</p>
   </section>
-
   <section class="testimonials">
     <h2>What Our Customers Say</h2>
     <p>“Fariki made buying my car so easy!” ★★★★★</p>
   </section>
-
   <section class="newsletter">
     <h2>Stay Updated</h2>
     <form>
@@ -222,12 +355,10 @@
       <button type="submit">Subscribe</button>
     </form>
   </section>
-
   <footer>
     <p>© 2025 FarikiCars.com | About | Contact | Terms</p>
   </footer>
 
-  <!-- Modal -->
   <div class="modal-overlay" id="modalOverlay">
     <div class="card">
       <button class="close-btn" id="closeModalBtn">&times;</button>
@@ -237,14 +368,71 @@
     </div>
   </div>
 
-  <!-- Toast -->
+  <div class="modal" id="inventoryModal">
+    <div class="modal-content">
+      <button class="close-btn-inventory" id="closeInventoryModal">&times;</button>
+      <div class="search-filter">
+        <input type="text" id="searchInput" placeholder="Search make or model...">
+        <select id="yearFilter">
+          <option value="">Year</option>
+          <option value="2025">2025</option>
+          <option value="2024">2024</option>
+          <option value="2023">2023</option>
+          <option value="2022">2022</option>
+          <option value="2021older">2021 & Older</option>
+        </select>
+        <select id="priceFilter">
+          <option value="">Price</option>
+          <option value="below20k">Below $20,000</option>
+          <option value="20k-40k">$20,000 - $40,000</option>
+          <option value="40k-70k">$40,000 - $70,000</option>
+          <option value="70k-100k">$70,000 - $100,000</option>
+          <option value="above100k">Above $100,000</option>
+        </select>
+      </div>
+      <div class="inventory" id="inventoryList">
+        <div class="car-card-inv" data-make="Toyota" data-model="Corolla" data-year="2023" data-price="20000">
+          <img src="https://source.unsplash.com/400x220/?toyota" alt="Toyota Corolla">
+          <div class="car-info-inv">
+            <h3>2023 Toyota Corolla</h3>
+            <p>Mileage: 120 km</p>
+            <p class="price">$20,000</p>
+            <div class="btn-group">
+              <a href="https://wa.me/212720112372?text=I'm%20interested%20in%20the%202023%20Toyota%20Corolla" target="_blank" class="whatsapp-btn">Check</a>
+            </div>
+          </div>
+        </div>
+        <div class="car-card-inv" data-make="Tesla" data-model="Model 3" data-year="2024" data-price="45000">
+          <img src="https://source.unsplash.com/400x220/?tesla" alt="Tesla Model 3">
+          <div class="car-info-inv">
+            <h3>2024 Tesla Model 3</h3>
+            <p>Mileage: 50 km</p>
+            <p class="price">$45,000</p>
+            <div class="btn-group">
+              <a href="https://wa.me/212720112372?text=I'm%20interested%20in%20the%202024%20Tesla%20Model%203" target="_blank" class="whatsapp-btn">Check</a>
+            </div>
+          </div>
+        </div>
+        <div class="car-card-inv" data-make="BMW" data-model="X5" data-year="2022" data-price="60000">
+          <img src="https://source.unsplash.com/400x220/?bmw" alt="BMW X5">
+          <div class="car-info-inv">
+            <h3>2022 BMW X5</h3>
+            <p>Mileage: 300 km</p>
+            <p class="price">$60,000</p>
+            <div class="btn-group">
+              <a href="https://wa.me/212720112372?text=I'm%20interested%20in%20the%202022%20BMW%20X5" target="_blank" class="whatsapp-btn">Check</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="toast"><span id="toastMsg"></span></div>
 
-  <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
     const firebaseConfig = {
       apiKey: "AIzaSyBYAoJVCHxdkyWl5TF9RQautlCR-aSbD2k",
       authDomain: "farikicars.firebaseapp.com",
@@ -254,23 +442,20 @@
       appId: "1:178935050975:web:eac640391a77adb1b02f6a",
       measurementId: "G-9LVM9ZQ5N5"
     };
-
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const googleProvider = new GoogleAuthProvider();
-
     const toast = document.getElementById("toast");
     const showToast = (msg) => {
       toast.style.display = "block";
       toast.textContent = msg;
       setTimeout(() => toast.style.display = "none", 4000);
     };
-
     const userNameDisplay = document.getElementById("userName");
     const modalOverlay = document.getElementById("modalOverlay");
     const openModalBtn = document.getElementById("openModalBtn");
     const logoutBtn = document.getElementById("logoutBtn");
-
+    
     // Modal buttons
     openModalBtn.addEventListener("click", () => modalOverlay.style.display = "flex");
     document.getElementById("closeModalBtn").addEventListener("click", () => modalOverlay.style.display = "none");
@@ -288,7 +473,7 @@
         showToast("Error: " + err.message);
       }
     });
-
+    
     // Logout
     logoutBtn.addEventListener("click", async () => {
       try {
@@ -303,12 +488,12 @@
     onAuthStateChanged(auth, (user) => {
       if (user) {
         userNameDisplay.textContent = `Hello, ${user.displayName}`;
-        openModalBtn.style.display = "none"; // hide sign up
-        logoutBtn.style.display = "inline-block"; // show logout
+        openModalBtn.style.display = "none";
+        logoutBtn.style.display = "inline-block";
       } else {
         userNameDisplay.textContent = "";
-        openModalBtn.style.display = "inline-block"; // show sign up
-        logoutBtn.style.display = "none"; // hide logout
+        openModalBtn.style.display = "inline-block";
+        logoutBtn.style.display = "none";
       }
     });
 
@@ -317,6 +502,62 @@
       const params = new URLSearchParams({ name, year, price, image });
       window.location.href = `vehicle.html?${params.toString()}`;
     }
+
+    // Inventory Modal JS
+    const inventoryModal = document.getElementById('inventoryModal');
+    const openInventoryModalBtn = document.getElementById('browseInventoryBtn');
+    const closeInventoryModalBtn = document.getElementById('closeInventoryModal');
+    
+    openInventoryModalBtn.addEventListener('click', () => {
+      inventoryModal.style.display = 'flex';
+    });
+    closeInventoryModalBtn.addEventListener('click', () => {
+      inventoryModal.style.display = 'none';
+    });
+    window.addEventListener('click', e => { 
+      if(e.target === inventoryModal) inventoryModal.style.display = 'none'; 
+    });
+
+    // Filtering functionality for inventory
+    const searchInput = document.getElementById("searchInput");
+    const yearFilter = document.getElementById("yearFilter");
+    const priceFilter = document.getElementById("priceFilter");
+    const cars = document.querySelectorAll(".car-card-inv");
+    
+    function filterCars() {
+      const searchText = searchInput.value.toLowerCase();
+      const year = yearFilter.value;
+      const price = priceFilter.value;
+    
+      cars.forEach(car => {
+        const make = car.dataset.make.toLowerCase();
+        const model = car.dataset.model.toLowerCase();
+        const carYear = parseInt(car.dataset.year);
+        const carPrice = parseInt(car.dataset.price);
+        let visible = true;
+    
+        if (searchText && !(make.includes(searchText) || model.includes(searchText))) visible = false;
+    
+        if (year) {
+          if (year === "2021older" && carYear > 2021) visible = false;
+          else if (year !== "2021older" && carYear !== parseInt(year)) visible = false;
+        }
+    
+        if (price) {
+          if (price === "below20k" && carPrice >= 20000) visible = false;
+          if (price === "20k-40k" && (carPrice < 20000 || carPrice > 40000)) visible = false;
+          if (price === "40k-70k" && (carPrice < 40000 || carPrice > 70000)) visible = false;
+          if (price === "70k-100k" && (carPrice < 70000 || carPrice > 100000)) visible = false;
+          if (price === "above100k" && carPrice <= 100000) visible = false;
+        }
+    
+        car.style.display = visible ? "flex" : "none";
+      });
+    }
+    
+    searchInput.addEventListener("input", filterCars);
+    yearFilter.addEventListener("change", filterCars);
+    priceFilter.addEventListener("change", filterCars);
   </script>
 </body>
 </html>
