@@ -1,602 +1,1057 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FarikiCars.com</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #2563eb;
-      --secondary: #1e3a8a;
-      --bg-light: #f4f6f9;
-      --card-shadow: rgba(0,0,0,0.08);
-      --card-hover-shadow: rgba(0,0,0,0.15);
-      --transition-speed: 0.3s;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Roboto', 'Inter', sans-serif; background: #f8f9fa; color: #333; }
-    a { text-decoration: none; color: inherit; }
-    header {
-      background: #111;
-      color: white;
-      padding: 1em 5%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: fixed;
-      width: 100%;
-      top: 0;
-      left: 0;
-      z-index: 1000;
-    } 
-    header h2 { font-weight: 700; font-size: 1.5em; }
-    nav a { margin-left: 1.5em; font-weight: 500; transition: color 0.3s; }
-    nav a:hover { color: #ffb400; }
-    #userName { font-weight: 600; margin-left: 1em; }
-    #logoutBtn {
-      padding: 8px 16px;
-      background: #e53e3e;
-      border: none;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
-      display: none;
-    }
-    .hero {
-      background: url('https://source.unsplash.com/1600x900/?car-banner') center/cover no-repeat;
-      color: white;
-      text-align: center;
-      padding: 8em 2em 5em;
-      margin-top: 60px;
-    }
-    .hero h1 { font-size: 3em; margin-bottom: 0.5em; text-shadow: 2px 2px 6px rgba(0,0,0,0.5); }
-    .hero p { font-size: 1.2em; margin-bottom: 1.5em; }
-    .cta-buttons button {
-      margin: 0.5em;
-      padding: 0.8em 2em;
-      font-size: 1em;
-      border: none;
-      background: #ffb400;
-      color: #111;
-      font-weight: bold;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .cta-buttons button:hover { background: #e09e00; }
-    section { padding: 3em 5%; text-align: center; }
-    .featured-cars {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2em;
-      margin-top: 2em;
-    }
-    .car-card {
-      background: white;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transition: transform 0.3s;
-      cursor: pointer;
-    }
-    .car-card:hover { transform: translateY(-5px); }
-    .car-card img { width: 100%; height: 160px; object-fit: cover; }
-    .car-card h3 { margin: 1em; font-size: 1.2em; }
-    .car-card p { margin: 0 1em 1em; color: #666; font-size: 0.9em; }
-    .why { background: #fff; padding: 3em 5%; }
-    .why p { font-size: 1.1em; margin-top: 1em; }
-    .testimonials { background: #f1f1f1; padding: 3em 5%; }
-    .testimonials p { font-style: italic; font-size: 1.1em; margin-top: 1em; }
-    .newsletter input {
-      padding: 0.8em;
-      width: 250px;
-      max-width: 80%;
-      border: 1px solid #ccc;
-      border-radius: 5px 0 0 5px;
-    }
-    .newsletter button {
-      padding: 0.85em 1.5em;
-      border: none;
-      background: #ffb400;
-      color: #111;
-      font-weight: bold;
-      border-radius: 0 5px 5px 0;
-      cursor: pointer;
-    }
-    .newsletter button:hover { background: #e09e00; }
-    footer {
-      background: #111;
-      color: white;
-      padding: 1em;
-      font-size: 0.9em;
-      text-align: center;
-    }
-    /* Modal */
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.65);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 2000;
-    }
-    .card {
-      max-width: 420px;
-      width: 100%;
-      background: #1e293b;
-      padding: 40px 32px;
-      border-radius: 24px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-      text-align: center;
-      position: relative;
-      color: white;
-    }
-    .muted { color: #94a3b8; font-size: 14px; margin: 14px 0 22px; }
-    .btn { width: 100%; padding: 16px; border-radius: 16px; font-weight: 600; cursor: pointer; border: none; }
-    .btn.google { background: #4285F4; color: #fff; }
-    .btn.google:hover { background: #357ae8; }
-    .close-btn { position: absolute; top: 16px; right: 16px; font-size: 24px; color: #fff; background: none; border: none; cursor: pointer; }
-    /* Toast */
-    #toast {
-      position: fixed;
-      bottom: 24px; left: 50%;
-      transform: translateX(-50%);
-      background: #0b141f;
-      color: #e6f9f0;
-      padding: 16px 24px;
-      border-radius: 16px;
-      display: none;
-      font-weight: 500;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-      z-index: 3000;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarikiCars.com</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e3a8a;
+            --bg-light: #f4f6f9;
+            --card-shadow: rgba(0,0,0,0.08);
+            --card-hover-shadow: rgba(0,0,0,0.15);
+            --transition-speed: 0.3s;
+        }
 
-    /* Inventory Modal styles */
-    .modal { 
-      display: none; 
-      position: fixed; 
-      top: 0; 
-      left: 0; 
-      width: 100%; 
-      height: 100%; 
-      background: rgba(0,0,0,0.5); 
-      justify-content: center; 
-      align-items: center; 
-      padding: 1rem; 
-      z-index: 100; 
-    }
-    .modal-content { 
-      background: white; 
-      border-radius: 20px; 
-      max-width: 1400px; 
-      width: 100%; 
-      max-height: 90vh; 
-      overflow-y: auto; 
-      padding: 1rem; 
-      position: relative; 
-    }
-    .close-btn-inventory { 
-      position: absolute; 
-      top: 1rem; 
-      right: 1rem; 
-      background: var(--primary); 
-      color: white; 
-      border: none; 
-      border-radius: 50%; 
-      width: 32px; 
-      height: 32px; 
-      font-size: 1.2rem; 
-      cursor: pointer; 
-      line-height: 0; 
-    }
-    .search-filter { 
-      display: flex; 
-      gap: 1rem; 
-      padding: 1rem; 
-      background: white; 
-      flex-wrap: wrap; 
-      border-radius: 12px; 
-      margin-bottom: 1rem; 
-    }
-    .search-filter input, .search-filter select { 
-      padding: 0.8rem 1.2rem; 
-      border: 1px solid #ddd; 
-      border-radius: 12px; 
-      flex: 1; 
-      font-size: 1rem; 
-    }
-    .inventory { 
-      display: grid; 
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-      gap: 2rem; 
-    }
-    .car-card-inv { 
-      background: white; 
-      border-radius: 20px; 
-      overflow: hidden; 
-      box-shadow: 0 4px 12px var(--card-shadow); 
-      transition: transform var(--transition-speed), box-shadow var(--transition-speed); 
-      display: flex; 
-      flex-direction: column; 
-      cursor: pointer; 
-    }
-    .car-card-inv:hover { 
-      transform: translateY(-8px); 
-      box-shadow: 0 12px 24px var(--card-hover-shadow); 
-    }
-    .car-card-inv img { 
-      width: 100%; 
-      height: 220px; 
-      object-fit: cover; 
-      transition: transform var(--transition-speed); 
-    }
-    .car-card-inv:hover img { 
-      transform: scale(1.05); 
-    }
-    .car-info-inv { 
-      padding: 1.5rem; 
-      flex-grow: 1; 
-      display: flex; 
-      flex-direction: column; 
-      justify-content: space-between; 
-    }
-    .car-info-inv h3 { 
-      margin-bottom: 0.5rem; 
-      font-size: 1.2rem; 
-      font-weight: 600; 
-      color: var(--secondary); 
-    }
-    .car-info-inv p { 
-      margin: 0.3rem 0; 
-      font-size: 0.95rem; 
-      color: #555; 
-    }
-    .price { 
-      font-weight: 700; 
-      color: var(--primary); 
-      margin-top: 0.8rem; 
-      font-size: 1.1rem; 
-    }
-    .btn-group { 
-      display: flex; 
-      gap: 0.5rem; 
-      margin-top: 1rem; 
-    }
-    .view-btn, .whatsapp-btn { 
-      flex: 1; 
-      padding: 0.7rem 1.2rem; 
-      text-align: center; 
-      color: white; 
-      border-radius: 10px; 
-      font-weight: 600; 
-      font-size: 0.95rem; 
-      text-decoration: none; 
-      transition: all var(--transition-speed); 
-    }
-    .view-btn { 
-      background: var(--primary); 
-    }
-    .view-btn:hover { 
-      background: var(--secondary); 
-    }
-    .whatsapp-btn { 
-      background: #25D366; 
-    }
-    .whatsapp-btn:hover { 
-      background: #1ebe5d; 
-    }
-    @media (max-width: 600px) { 
-      .search-filter { flex-direction: column; } 
-      header h1 { font-size: 1.5rem; } 
-      .btn-group { flex-direction: column; } 
-    }
-  </style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', 'Inter', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        header {
+            background: #111;
+            color: white;
+            padding: 1em 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        header h2 {
+            font-weight: 700;
+            font-size: 1.5em;
+        }
+
+        nav a {
+            margin-left: 1.5em;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #ffb400;
+        }
+
+        #userName {
+            font-weight: 600;
+            margin-left: 1em;
+        }
+
+        #logoutBtn {
+            padding: 8px 16px;
+            background: #e53e3e;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            display: none;
+        }
+
+        .hero {
+            background: url('https://source.unsplash.com/1600x900/?car-banner') center/cover no-repeat;
+            color: white;
+            text-align: center;
+            padding: 8em 2em 5em;
+            margin-top: 60px;
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            margin-bottom: 0.5em;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            margin-bottom: 1.5em;
+        }
+
+        .cta-buttons button {
+            margin: 0.5em;
+            padding: 0.8em 2em;
+            font-size: 1em;
+            border: none;
+            background: #ffb400;
+            color: #111;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .cta-buttons button:hover {
+            background: #e09e00;
+        }
+
+        section {
+            padding: 3em 5%;
+            text-align: center;
+        }
+
+        .featured-cars {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2em;
+            margin-top: 2em;
+        }
+
+        .car-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .car-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .car-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .car-card h3 {
+            margin: 1em;
+            font-size: 1.2em;
+        }
+
+        .car-card p {
+            margin: 0 1em 1em;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .why {
+            background: #fff;
+            padding: 3em 5%;
+        }
+
+        .why p {
+            font-size: 1.1em;
+            margin-top: 1em;
+        }
+
+        .testimonials {
+            background: #f1f1f1;
+            padding: 3em 5%;
+        }
+
+        .testimonials p {
+            font-style: italic;
+            font-size: 1.1em;
+            margin-top: 1em;
+        }
+
+        .newsletter input {
+            padding: 0.8em;
+            width: 250px;
+            max-width: 80%;
+            border: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+        }
+
+        .newsletter button {
+            padding: 0.85em 1.5em;
+            border: none;
+            background: #ffb400;
+            color: #111;
+            font-weight: bold;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+
+        .newsletter button:hover {
+            background: #e09e00;
+        }
+
+        footer {
+            background: #111;
+            color: white;
+            padding: 1em;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.65);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .card {
+            max-width: 420px;
+            width: 100%;
+            background: #1e293b;
+            padding: 40px 32px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            text-align: center;
+            position: relative;
+            color: white;
+        }
+
+        .muted {
+            color: #94a3b8;
+            font-size: 14px;
+            margin: 14px 0 22px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn.google {
+            background: #4285F4;
+            color: #fff;
+        }
+
+        .btn.google:hover {
+            background: #357ae8;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 24px;
+            color: #fff;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Toast */
+        #toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0b141f;
+            color: #e6f9f0;
+            padding: 16px 24px;
+            border-radius: 16px;
+            display: none;
+            font-weight: 500;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            z-index: 3000;
+        }
+
+        /* Inventory Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 1400px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 1rem;
+            position: relative;
+        }
+
+        .close-btn-inventory {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            line-height: 0;
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: white;
+            flex-wrap: wrap;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .search-filter input,
+        .search-filter select {
+            padding: 0.8rem 1.2rem;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            flex: 1;
+            font-size: 1rem;
+        }
+
+        .inventory {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .car-card-inv {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px var(--card-shadow);
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .car-card-inv:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px var(--card-hover-shadow);
+        }
+
+        .car-card-inv img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            transition: transform var(--transition-speed);
+        }
+
+        .car-card-inv:hover img {
+            transform: scale(1.05);
+        }
+
+        .car-info-inv {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .car-info-inv h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .car-info-inv p {
+            margin: 0.3rem 0;
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .price {
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: 0.8rem;
+            font-size: 1.1rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .view-btn,
+        .whatsapp-btn,
+        .loan-btn {
+            flex: 1;
+            padding: 0.7rem 1.2rem;
+            text-align: center;
+            color: white;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all var(--transition-speed);
+            border: none;
+            cursor: pointer;
+        }
+
+        .view-btn {
+            background: var(--primary);
+        }
+
+        .view-btn:hover {
+            background: var(--secondary);
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+        }
+
+        .whatsapp-btn:hover {
+            background: #1ebe5d;
+        }
+        
+        .loan-btn {
+            background: #ff7f50;
+        }
+
+        .loan-btn:hover {
+            background: #ff6347;
+        }
+
+        @media (max-width: 600px) {
+            .search-filter {
+                flex-direction: column;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+
+        /* Loan Simulator Modal Styles */
+        .simulator-modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            overflow-y: auto;
+        }
+
+        .simulator-modal-content {
+            background: #fff;
+            color: #333;
+            border-radius: 16px;
+            padding: 20px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            margin: 40px auto;
+            position: relative;
+        }
+
+        .simulator-close-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .input-group input[type=number] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .payment-box {
+            background: #ff7f50;
+            color: #fff;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .summary-card {
+            background: #f0f4f8;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            color: #333;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .totals-card {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            color: #333;
+        }
+
+        .totals-card strong {
+            font-size: 1.1rem;
+        }
+
+        #schedule-container {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .simulator-modal-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            table-layout: fixed;
+        }
+
+        .simulator-modal-content th,
+        .simulator-modal-content td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: right;
+            font-size: 0.9rem;
+        }
+
+        .simulator-modal-content th {
+            background: #2a5298;
+            color: #fff;
+        }
+
+        .simulator-modal-content tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+
+        @media (max-width: 600px) {
+            .payment-box {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h2>FarikiCars.com</h2>
-    <div>
-      <button id="openModalBtn" style="padding:8px 16px; font-weight:bold; cursor:pointer;">Sign Up</button>
-      <span id="userName"></span>
-      <button id="logoutBtn">Logout</button>
-    </div>
-  </header>
-  <section class="hero">
-    <h1>Drive Your Dream</h1>
-    <p>Discover it at FarikiCars</p>
-    <div class="cta-buttons">
-      <button id="browseInventoryBtn">Browse Inventory</button>
-    </div>
-  </section>
-  <section class="featured">
-    <h2>Featured Cars</h2>
-    <div class="featured-cars">
-      </div>
-  </section>
-  <section class="why">
-    <h2>Why Choose Us</h2>
-    <p>Trusted Dealers • Easy Financing • Nationwide Delivery</p>
-  </section>
-  <section class="testimonials">
-    <h2>What Our Customers Say</h2>
-    <p>“Fariki made buying my car so easy!” ★★★★★</p>
-  </section>
-  <section class="newsletter">
-    <h2>Stay Updated</h2>
-    <form id="newsletter-form" action="https://formspree.io/f/xgvzbjpw" method="POST">
-      <input type="email" name="email" placeholder="Enter your email" required>
-      <button type="submit">Subscribe</button>
-    </form>
-  </section>
-  <footer>
-    <p>© 2025 FarikiCars.com | About | Contact | Terms</p>
-  </footer>
-
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="card">
-      <button class="close-btn" id="closeModalBtn">&times;</button>
-      <h1>Join FarikiCars</h1>
-      <p class="muted">Sign up quickly with your Google account.</p>
-      <button id="signUpBtn" class="btn google">Sign Up with Google</button>
-    </div>
-  </div>
-
-  <div class="modal" id="inventoryModal">
-    <div class="modal-content">
-      <button class="close-btn-inventory" id="closeInventoryModal">&times;</button>
-      <div class="search-filter">
-        <input type="text" id="searchInput" placeholder="Search make or model...">
-        <select id="yearFilter">
-          <option value="">Year</option>
-          <option value="2025">2025</option>
-          <option value="2024">2024</option>
-          <option value="2023">2023</option>
-          <option value="2022">2022</option>
-          <option value="2021older">2021 & Older</option>
-        </select>
-        <select id="priceFilter">
-          <option value="">Price</option>
-          <option value="below20k">Below $20,000</option>
-          <option value="20k-40k">$20,000 - $40,000</option>
-          <option value="40k-70k">$40,000 - $70,000</option>
-          <option value="70k-100k">$70,000 - $100,000</option>
-          <option value="above100k">Above $100,000</option>
-        </select>
-      </div>
-      <div class="inventory" id="inventoryList">
-        <div class="car-card-inv" data-make="Toyota" data-model="Corolla" data-year="2023" data-price="20000">
-          <img src="images/toyota.jpg" alt="Toyota Corolla">
-          <div class="car-info-inv">
-            <h3>2023 Toyota Corolla</h3>
-            <p>Mileage: 120 km</p>
-            <p class="price">$20,000</p>
-            <div class="btn-group">
-              <a href="https://wa.me/212720112372?text=I'm%20interested%20in%20the%202023%20Toyota%20Corolla" target="_blank" class="whatsapp-btn">Check</a>
-            </div>
-          </div>
+    <header>
+        <h2>FarikiCars.com</h2>
+        <div>
+            <button id="openModalBtn" style="padding:8px 16px; font-weight:bold; cursor:pointer;">Sign Up</button>
+            <span id="userName"></span>
+            <button id="logoutBtn">Logout</button>
         </div>
-        <div class="car-card-inv" data-make="Tesla" data-model="Model 3" data-year="2024" data-price="45000">
-          <img src="images/tesla.jpg" alt="Tesla Model 3">
-          <div class="car-info-inv">
-            <h3>2024 Tesla Model 3</h3>
-            <p>Mileage: 50 km</p>
-            <p class="price">$45,000</p>
-            <div class="btn-group">
-              <a href="https://wa.me/212720112372?text=I'm%20interested%20in%20the%202024%20Tesla%20Model%203" target="_blank" class="whatsapp-btn">Check</a>
-            </div>
-          </div>
+    </header>
+
+    <section class="hero">
+        <h1>Drive Your Dream</h1>
+        <p>Discover it at FarikiCars</p>
+        <div class="cta-buttons">
+            <button id="browseInventoryBtn">Browse Inventory</button>
         </div>
-        <div class="car-card-inv" data-make="BMW" data-model="X5" data-year="2022" data-price="60000">
-          <img src="images/bmw.jpg" alt="BMW X5">
-          <div class="car-info-inv">
-            <h3>2022 BMW X5</h3>
-            <p>Mileage: 300 km</p>
-            <p class="price">$60,000</p>
-            <div class="btn-group">
-              <a href="https://wa.me/212720112372?text=I'm%20interested%20in%20the%202022%20BMW%20X5" target="_blank" class="whatsapp-btn">Check</a>
+    </section>
+
+    <section class="featured">
+        <h2>Featured Cars</h2>
+        <div class="featured-cars">
             </div>
-          </div>
+    </section>
+
+    <section class="why">
+        <h2>Why Choose Us</h2>
+        <p>Trusted Dealers • Easy Financing • Nationwide Delivery</p>
+    </section>
+
+    <section class="testimonials">
+        <h2>What Our Customers Say</h2>
+        <p>“Fariki made buying my car so easy!” ★★★★★</p>
+    </section>
+
+    <section class="newsletter">
+        <h2>Stay Updated</h2>
+        <form id="newsletter-form" action="https://formspree.io/f/xgvzbjpw" method="POST">
+            <input type="email" name="email" placeholder="Enter your email" required>
+            <button type="submit">Subscribe</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>© 2025 FarikiCars.com | About | Contact | Terms</p>
+    </footer>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="card">
+            <button class="close-btn" id="closeModalBtn">&times;</button>
+            <h1>Join FarikiCars</h1>
+            <p class="muted">Sign up quickly with your Google account.</p>
+            <button id="signUpBtn" class="btn google">Sign Up with Google</button>
         </div>
-      </div>
     </div>
-  </div>
 
-  <div id="toast"><span id="toastMsg"></span></div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    const firebaseConfig = {
-      apiKey: "AIzaSyBYAoJVCHxdkyWl5TF9RQautlCR-aSbD2k",
-      authDomain: "farikicars.firebaseapp.com",
-      projectId: "farikicars",
-      storageBucket: "farikicars.firebasestorage.app",
-      messagingSenderId: "178935050975",
-      appId: "1:178935050975:web:eac640391a77adb1b02f6a",
-      measurementId: "G-9LVM9ZQ5N5"
-    };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const googleProvider = new GoogleAuthProvider();
-    const toast = document.getElementById("toast");
-    const showToast = (msg) => {
-      toast.style.display = "block";
-      toast.textContent = msg;
-      setTimeout(() => toast.style.display = "none", 4000);
-    };
-    const userNameDisplay = document.getElementById("userName");
-    const modalOverlay = document.getElementById("modalOverlay");
-    const openModalBtn = document.getElementById("openModalBtn");
-    const logoutBtn = document.getElementById("logoutBtn");
-    
-    // Modal buttons
-    openModalBtn.addEventListener("click", () => modalOverlay.style.display = "flex");
-    document.getElementById("closeModalBtn").addEventListener("click", () => modalOverlay.style.display = "none");
-    modalOverlay.addEventListener("click", (e) => { if(e.target === modalOverlay) modalOverlay.style.display = "none"; });
-
-    // Google Sign-In
-    document.getElementById("signUpBtn").addEventListener("click", async () => {
-      try {
-        const result = await signInWithPopup(auth, googleProvider);
-        const displayName = result.user.displayName;
-        userNameDisplay.textContent = `Hello, ${displayName}`;
-        showToast(`Welcome ${displayName}!`);
-        modalOverlay.style.display = "none";
-      } catch (err) {
-        showToast("Error: " + err.message);
-      }
-    });
-    
-    // Logout
-    logoutBtn.addEventListener("click", async () => {
-      try {
-        await signOut(auth);
-        showToast("You have signed out.");
-      } catch (err) {
-        showToast("Error: " + err.message);
-      }
-    });
-
-    // Stay signed in
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        userNameDisplay.textContent = `Hello, ${user.displayName}`;
-        openModalBtn.style.display = "none";
-        logoutBtn.style.display = "inline-block";
-      } else {
-        userNameDisplay.textContent = "";
-        openModalBtn.style.display = "inline-block";
-        logoutBtn.style.display = "none";
-      }
-    });
-
-    // Car detail redirect
-    window.goToDetail = function(name, year, price, image) {
-      const params = new URLSearchParams({ name, year, price, image });
-      window.location.href = `vehicle.html?${params.toString()}`;
-    }
-
-    // Inventory Modal JS
-    const inventoryModal = document.getElementById('inventoryModal');
-    const openInventoryModalBtn = document.getElementById('browseInventoryBtn');
-    const closeInventoryModalBtn = document.getElementById('closeInventoryModal');
-    
-    openInventoryModalBtn.addEventListener('click', () => {
-      inventoryModal.style.display = 'flex';
-    });
-    closeInventoryModalBtn.addEventListener('click', () => {
-      inventoryModal.style.display = 'none';
-    });
-    window.addEventListener('click', e => { 
-      if(e.target === inventoryModal) inventoryModal.style.display = 'none'; 
-    });
-
-    // Filtering functionality for inventory
-    const searchInput = document.getElementById("searchInput");
-    const yearFilter = document.getElementById("yearFilter");
-    const priceFilter = document.getElementById("priceFilter");
-    const cars = document.querySelectorAll(".car-card-inv");
-    
-    function filterCars() {
-      const searchText = searchInput.value.toLowerCase();
-      const year = yearFilter.value;
-      const price = priceFilter.value;
-    
-      cars.forEach(car => {
-        const make = car.dataset.make.toLowerCase();
-        const model = car.dataset.model.toLowerCase();
-        const carYear = parseInt(car.dataset.year);
-        const carPrice = parseInt(car.dataset.price);
-        let visible = true;
-    
-        if (searchText && !(make.includes(searchText) || model.includes(searchText))) visible = false;
-    
-        if (year) {
-          if (year === "2021older" && carYear > 2021) visible = false;
-          else if (year !== "2021older" && carYear !== parseInt(year)) visible = false;
-        }
-    
-        if (price) {
-          if (price === "below20k" && carPrice >= 20000) visible = false;
-          if (price === "20k-40k" && (carPrice < 20000 || carPrice > 40000)) visible = false;
-          if (price === "40k-70k" && (carPrice < 40000 || carPrice > 70000)) visible = false;
-          if (price === "70k-100k" && (carPrice < 70000 || carPrice > 100000)) visible = false;
-          if (price === "above100k" && carPrice <= 100000) visible = false;
-        }
-    
-        car.style.display = visible ? "flex" : "none";
-      });
-    }
-    
-    searchInput.addEventListener("input", filterCars);
-    yearFilter.addEventListener("change", filterCars);
-    priceFilter.addEventListener("change", filterCars);
-
-    function displayFeaturedCars() {
-      const featuredContainer = document.querySelector('.featured-cars');
-      const inventoryCars = document.querySelectorAll('.inventory .car-card-inv');
-      
-      featuredContainer.innerHTML = ''; // Clear existing content
-
-      inventoryCars.forEach(car => {
-        const make = car.dataset.make;
-        const model = car.dataset.model;
-        const year = car.dataset.year;
-        const price = car.dataset.price;
-        const image = car.querySelector('img').getAttribute('src');
-
-        const carName = `${year} ${make} ${model}`;
-        const carPriceFormatted = `$${parseInt(price).toLocaleString()}`;
-        
-        const cardHTML = `
-          <div class="car-card" onclick="goToDetail('${carName}', '${year}', '${carPriceFormatted}', '${image}')">
-            <img src="${image}" alt="${carName}">
-            <div class="car-info">
-              <h3>${carName}</h3>
-              <p>${year} • ${carPriceFormatted}</p>
+    <div class="modal" id="inventoryModal">
+        <div class="modal-content">
+            <button class="close-btn-inventory" id="closeInventoryModal">&times;</button>
+            <div class="search-filter">
+                <input type="text" id="searchInput" placeholder="Search make or model...">
+                <select id="yearFilter">
+                    <option value="">Year</option>
+                    <option value="2025">2025</option>
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                    <option value="2021older">2021 & Older</option>
+                </select>
+                <select id="priceFilter">
+                    <option value="">Price</option>
+                    <option value="below20k">Below $20,000</option>
+                    <option value="20k-40k">$20,000 - $40,000</option>
+                    <option value="40k-70k">$40,000 - $70,000</option>
+                    <option value="70k-100k">$70,000 - $100,000</option>
+                    <option value="above100k">Above $100,000</option>
+                </select>
             </div>
-          </div>
-        `;
-        featuredContainer.innerHTML += cardHTML;
-      });
-    }
+            <div class="inventory" id="inventoryList">
+                <div class="car-card-inv" data-make="Toyota" data-model="Corolla" data-year="2023" data-price="20000">
+                    <img src="images/toyota.jpg" alt="Toyota Corolla">
+                    <div class="car-info-inv">
+                        <h3>2023 Toyota Corolla</h3>
+                        <p>Mileage: 120 km</p>
+                        <p class="price">$20,000</p>
+                        <div class="btn-group">
+                            <button class="whatsapp-btn">Check</button>
+                            <button class="loan-btn" data-price="20000">Loan Simulator</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="car-card-inv" data-make="Tesla" data-model="Model 3" data-year="2024" data-price="45000">
+                    <img src="images/tesla.jpg" alt="Tesla Model 3">
+                    <div class="car-info-inv">
+                        <h3>2024 Tesla Model 3</h3>
+                        <p>Mileage: 50 km</p>
+                        <p class="price">$45,000</p>
+                        <div class="btn-group">
+                            <button class="whatsapp-btn">Check</button>
+                            <button class="loan-btn" data-price="45000">Loan Simulator</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="car-card-inv" data-make="BMW" data-model="X5" data-year="2022" data-price="60000">
+                    <img src="images/bmw.jpg" alt="BMW X5">
+                    <div class="car-info-inv">
+                        <h3>2022 BMW X5</h3>
+                        <p>Mileage: 300 km</p>
+                        <p class="price">$60,000</p>
+                        <div class="btn-group">
+                            <button class="whatsapp-btn">Check</button>
+                            <button class="loan-btn" data-price="60000">Loan Simulator</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    // Call this function when the page loads
-    window.onload = displayFeaturedCars;
+    <div id="simulatorModal" class="simulator-modal">
+        <div class="simulator-modal-content">
+            <span class="simulator-close-btn" id="closeSimulator">&times;</span>
+            <h2 style="text-align:center;">Car Loan Simulator</h2>
+            <div class="input-group">
+                <label>Vehicle Price ($):</label>
+                <input type="number" id="amount" value="20000" min="1000" step="500">
+            </div>
+            <div class="input-group">
+                <label>Annual Interest Rate (%):</label>
+                <input type="number" id="rate" value="5" min="0" step="0.5">
+            </div>
+            <div class="input-group">
+                <label>Loan Term (years):</label>
+                <input type="number" id="years" value="5" min="1" max="10">
+            </div>
+            <div class="input-group">
+                <label>Insurance per Month ($):</label>
+                <input type="number" id="insurance" value="50" min="0" step="10">
+            </div>
+            <div class="input-group">
+                <label>Taxes (% of vehicle price):</label>
+                <input type="number" id="tax" value="8" min="0" step="0.5">
+            </div>
+            <div class="payment-box" id="monthlyPayment">Monthly Payment: $0</div>
+            <div class="summary-card" id="summary">Loading summary...</div>
+            <div class="totals-card" id="total">Loading totals...</div>
+            <div id="schedule-container">
+                <table id="schedule">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Principal</th>
+                            <th>Interest</th>
+                            <th>Insurance</th>
+                            <th>Remaining</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-    // Newsletter form submission handling
-    const newsletterForm = document.getElementById("newsletter-form");
-    newsletterForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
+    <div id="toast"><span id="toastMsg"></span></div>
 
-      const form = event.target;
-      const formData = new FormData(form);
-      
-      try {
-        const response = await fetch(form.action, {
-          method: form.method,
-          body: formData,
-          headers: {
-            'Accept': 'application/json'
-          }
+    <script type="module">
+        import {
+            initializeApp
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import {
+            getAuth,
+            GoogleAuthProvider,
+            signInWithPopup,
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyBYAoJVCHxdkyWl5TF9RQautlCR-aSbD2k",
+            authDomain: "farikicars.firebaseapp.com",
+            projectId: "farikicars",
+            storageBucket: "farikicars.firebasestorage.app",
+            messagingSenderId: "178935050975",
+            appId: "1:178935050975:web:eac640391a77adb1b02f6a",
+            measurementId: "G-9LVM9ZQ5N5"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        const toast = document.getElementById("toast");
+        const showToast = (msg) => {
+            toast.style.display = "block";
+            toast.textContent = msg;
+            setTimeout(() => toast.style.display = "none", 4000);
+        };
+
+        const userNameDisplay = document.getElementById("userName");
+        const modalOverlay = document.getElementById("modalOverlay");
+        const openModalBtn = document.getElementById("openModalBtn");
+        const logoutBtn = document.getElementById("logoutBtn");
+
+        // Auth Modal buttons
+        openModalBtn.addEventListener("click", () => modalOverlay.style.display = "flex");
+        document.getElementById("closeModalBtn").addEventListener("click", () =>
+            modalOverlay.style.display = "none");
+        modalOverlay.addEventListener("click", (e) => {
+            if (e.target === modalOverlay)
+                modalOverlay.style.display = "none";
         });
 
-        if (response.ok) {
-          showToast("Thanks for subscribing!");
-          form.reset(); // Clear the input field
-        } else {
-          showToast("Subscription failed. Please try again.");
+        // Google Sign-In
+        document.getElementById("signUpBtn").addEventListener("click", async () => {
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                const displayName = result.user.displayName;
+                userNameDisplay.textContent = `Hello, ${displayName}`;
+                showToast(`Welcome ${displayName}!`);
+                modalOverlay.style.display = "none";
+            } catch (err) {
+                showToast("Error: " + err.message);
+            }
+        });
+
+        // Logout
+        logoutBtn.addEventListener("click", async () => {
+            try {
+                await signOut(auth);
+                showToast("You have signed out.");
+            } catch (err) {
+                showToast("Error: " + err.message);
+            }
+        });
+
+        // Stay signed in
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                userNameDisplay.textContent = `Hello, ${user.displayName}`;
+                openModalBtn.style.display = "none";
+                logoutBtn.style.display = "inline-block";
+            } else {
+                userNameDisplay.textContent = "";
+                openModalBtn.style.display = "inline-block";
+                logoutBtn.style.display = "none";
+            }
+        });
+
+        // Car detail redirect (not used in this simplified version but kept for consistency)
+        window.goToDetail = function (name, year, price, image) {
+            const params = new URLSearchParams({
+                name,
+                year,
+                price,
+                image
+            });
+            window.location.href = `vehicle.html?${params.toString()}`;
         }
-      } catch (error) {
-        showToast("An error occurred. Please check your connection.");
-        console.error("Form submission error:", error);
-      }
-    });
-  </script>
+
+        // Inventory Modal JS
+        const inventoryModal = document.getElementById('inventoryModal');
+        const openInventoryModalBtn = document.getElementById('browseInventoryBtn');
+        const closeInventoryModalBtn = document.getElementById('closeInventoryModal');
+        openInventoryModalBtn.addEventListener('click', () => {
+            inventoryModal.style.display = 'flex';
+        });
+        closeInventoryModalBtn.addEventListener('click', () => {
+            inventoryModal.style.display = 'none';
+        });
+        window.addEventListener('click', e => {
+            if (e.target === inventoryModal) inventoryModal.style.display = 'none';
+        });
+
+        // Filtering functionality for inventory
+        const searchInput = document.getElementById("searchInput");
+        const yearFilter = document.getElementById("yearFilter");
+        const priceFilter = document.getElementById("priceFilter");
+        const cars = document.querySelectorAll(".car-card-inv");
+
+        function filterCars() {
+            const searchText = searchInput.value.toLowerCase();
+            const year = yearFilter.value;
+            const price = priceFilter.value;
+
+            cars.forEach(car => {
+                const make = car.dataset.make.toLowerCase();
+                const model = car.dataset.model.toLowerCase();
+                const carYear = parseInt(car.dataset.year);
+                const carPrice = parseInt(car.dataset.price);
+                let visible = true;
+
+                if (searchText && !(make.includes(searchText) || model.includes(searchText))) visible =
+                    false;
+                if (year) {
+                    if (year === "2021older" && carYear > 2021) visible = false;
+                    else if (year !== "2021older" && carYear !== parseInt(year)) visible = false;
+                }
+                if (price) {
+                    if (price === "below20k" && carPrice >= 20000) visible = false;
+                    if (price === "20k-40k" && (carPrice < 20000 || carPrice > 40000)) visible = false;
+                    if (price === "40k-70k" && (carPrice < 40000 || carPrice > 70000)) visible = false;
+                    if (price === "70k-100k" && (carPrice < 70000 || carPrice > 100000)) visible = false;
+                    if (price === "above100k" && carPrice <= 100000) visible = false;
+                }
+                car.style.display = visible ? "flex" : "none";
+            });
+        }
+        searchInput.addEventListener("input", filterCars);
+        yearFilter.addEventListener("change", filterCars);
+        priceFilter.addEventListener("change", filterCars);
+
+        // Display featured cars on page load
+        function displayFeaturedCars() {
+            const featuredContainer = document.querySelector('.featured-cars');
+            const inventoryCars = document.querySelectorAll('.inventory .car-card-inv');
+            featuredContainer.innerHTML = '';
+            inventoryCars.forEach(car => {
+                const make = car.dataset.make;
+                const model = car.dataset.model;
+                const year = car.dataset.year;
+                const price = car.dataset.price;
+                const image = car.querySelector('img').getAttribute('src');
+                const carName = `${year} ${make} ${model}`;
+                const carPriceFormatted = `$${parseInt(price).toLocaleString()}`;
+                const cardHTML = `
+                <div class="car-card" onclick="goToDetail('${carName}', '${year}', '${carPriceFormatted}', '${image}')">
+                    <img src="${image}" alt="${carName}">
+                    <div class="car-info">
+                        <h3>${carName}</h3>
+                        <p>${year} • ${carPriceFormatted}</p>
+                    </div>
+                </div>
+                `;
+                featuredContainer.innerHTML += cardHTML;
+            });
+        }
+        window.onload = displayFeaturedCars;
+
+        // Newsletter form submission handling
+        const newsletterForm = document.getElementById("newsletter-form");
+        newsletterForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            try {
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                if (response.ok) {
+                    showToast("Thanks for subscribing!");
+                    form.reset();
+                } else {
+                    showToast("Subscription failed. Please try again.");
+                }
+            } catch (error) {
+                showToast("An error occurred. Please check your connection.");
+                console.error("Form submission error:", error);
+            }
+        });
+
+        // Loan Simulator Logic
+        const simulatorModal = document.getElementById('simulatorModal');
+        const closeSimulatorBtn = document.getElementById('closeSimulator');
+        const loanButtons = document.querySelectorAll('.loan-btn');
+        const amountInput = document.getElementById("amount");
+        const rateInput = document.getElementById("rate");
+        const yearsInput = document.getElementById("years");
+        const insuranceInput = document.getElementById("insurance");
+        const taxInput = document.getElementById("tax");
+        const summaryDiv = document.getElementById("summary");
+        const totalDiv = document.getElementById("total");
+        const monthlyPaymentDiv = document.getElementById("monthlyPayment");
+        const tableBody = document.getElementById("tableBody");
+
+        // Event listeners for loan buttons on car cards
+        loanButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const price = e.target.dataset.price;
+                amountInput.value = price;
+                simulatorModal.style.display = 'block';
+                calculate();
+            });
+        });
+
+        // Close simulator modal
+        closeSimulatorBtn.addEventListener('click', () => {
+            simulatorModal.style.display = 'none';
+        });
+
+        // Close if clicking outside simulator content
+        simulatorModal.addEventListener('click', (e) => {
+            if (e.target === simulatorModal) {
+                simulatorModal.style.display = 'none';
+            }
+        });
+
+        // Calculator function
+        function calculate() {
+            const vehiclePrice = parseFloat(amountInput.value) || 0;
+            const annualRate = parseFloat(rateInput.value) / 100 || 0;
+            const years = parseInt(yearsInput.value) || 0;
+            const months = years * 12;
+            const monthlyRate = annualRate / 12;
+            const insurance = parseFloat(insuranceInput.value) || 0;
+            const taxRate = parseFloat(taxInput.value) / 100 || 0;
+            const tax = vehiclePrice * taxRate;
+
+            let monthlyPayment = monthlyRate === 0 ?
+                vehiclePrice / months :
+                vehiclePrice * monthlyRate / (1 - Math.pow(1 + monthlyRate, -months));
+
+            const totalMonthly = monthlyPayment + insurance;
+            const totalVehiclePrice = vehiclePrice + tax;
+
+            monthlyPaymentDiv.innerHTML = `Monthly Payment: $${totalMonthly.toFixed(2)}`;
+            summaryDiv.innerHTML = `Vehicle Price (with taxes): $${totalVehiclePrice.toFixed(2)}<br>Loan Duration: ${months} months`;
+
+            let totalPrincipal = 0,
+                totalInterest = 0,
+                totalInsurance = insurance * months;
+            tableBody.innerHTML = "";
+            let balance = vehiclePrice;
+
+            for (let i = 1; i <= months; i++) {
+                const interest = balance * monthlyRate;
+                const principal = monthlyPayment - interest;
+                balance -= principal;
+
+                if (balance < 0) balance = 0;
+
+                totalPrincipal += principal;
+                totalInterest += interest;
+
+                tableBody.innerHTML += `
+                    <tr>
+                        <td>${i}</td>
+                        <td>$${principal.toFixed(2)}</td>
+                        <td>$${interest.toFixed(2)}</td>
+                        <td>$${insurance.toFixed(2)}</td>
+                        <td>$${balance.toFixed(2)}</td>
+                    </tr>
+                `;
+            }
+
+            const grandTotal = totalPrincipal + totalInterest + totalInsurance + tax;
+            totalDiv.innerHTML = `Principal Paid: $${totalPrincipal.toFixed(2)}<br>
+                Interest Paid: $${totalInterest.toFixed(2)}<br>
+                Insurance Paid: $${totalInsurance.toFixed(2)}<br>
+                Taxes: $${tax.toFixed(2)}<br>
+                <strong>Grand Total: $${grandTotal.toFixed(2)}</strong>`;
+        }
+
+        // Add event listeners to input fields
+        [amountInput, rateInput, yearsInput, insuranceInput, taxInput].forEach(input =>
+            input.addEventListener("input", calculate)
+        );
+
+        // Initial calculation on page load
+        calculate();
+    </script>
 </body>
 </html>
-
