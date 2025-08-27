@@ -681,28 +681,34 @@ Calculate
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+// Firebase configuration: replace these placeholders with your actual project details
 const firebaseConfig = {
 apiKey: "AlzaSyBYAoJVCHxdkyWI5TF9RQautICR-aSbD2k",
 authDomain: "farikicars.firebaseapp.com",
-projectId: "farikicars",
-storageBucket: "farikicars.firebasestorage.app",
+projectId: "farikicars-e6a66", // Corrected project ID
+storageBucket: "farikicars-e6a66.appspot.com", // Corrected storage bucket
 messagingSenderId: "178935050975",
 appId: "1:178935050975:web:eac640391a77adb1b02f6a",
 measurementId: "G-9LVM9ZQ5N5"
 };
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 const toast = document.getElementById("toast");
+
 const showToast = (msg) => {
 toast.style.display = "block";
 toast.textContent = msg;
 setTimeout(() => toast.style.display = "none", 4000);
 };
+
 const userNameDisplay = document.getElementById("userName");
 const modalOverlay = document.getElementById("modalOverlay");
 const openModalBtn = document.getElementById("openModalBtn");
 const logoutBtn = document.getElementById("logoutBtn");
+
 // Auth Modal buttons
 openModalBtn.addEventListener("click", () => modalOverlay.style.display = "flex");
 document.getElementById("closeModalBtn").addEventListener("click", () =>
@@ -711,6 +717,7 @@ modalOverlay.addEventListener("click", (e) => {
 if (e.target === modalOverlay)
 modalOverlay.style.display = "none";
 });
+
 // Google Sign-In
 document.getElementById("signUpBtn").addEventListener("click", async () => {
 try {
@@ -723,6 +730,7 @@ modalOverlay.style.display = "none";
 showToast("Error: " + err.message);
 }
 });
+
 // Logout
 logoutBtn.addEventListener("click", async () => {
 try {
@@ -732,6 +740,7 @@ showToast("You have signed out.");
 showToast("Error: " + err.message);
 }
 });
+
 // Stay signed in
 onAuthStateChanged(auth, (user) => {
 if (user) {
@@ -744,45 +753,57 @@ openModalBtn.style.display = "inline-block";
 logoutBtn.style.display = "none";
 }
 });
+
 // Car detail redirect (not used in this simplified version but kept for consistency)
 window.goToDetail = function (name, year, price, image) {
 const params = new URLSearchParams({ name, year, price, image });
 window.location.href = `vehicle.html?${params.toString()}`;
 }
+
 // Inventory Modal JS
 const inventoryModal = document.getElementById('inventoryModal');
 const openInventoryModalBtn = document.getElementById('browseInventoryBtn');
 const closeInventoryModalBtn = document.getElementById('closeInventoryModal');
+
 openInventoryModalBtn.addEventListener('click', () => {
 inventoryModal.style.display = 'flex';
 });
+
 closeInventoryModalBtn.addEventListener('click', () => {
 inventoryModal.style.display = 'none';
 });
+
 window.addEventListener('click', e => {
 if (e.target === inventoryModal) inventoryModal.style.display = 'none';
 });
+
 // Filtering functionality for inventory
 const searchInput = document.getElementById("searchInput");
 const yearFilter = document.getElementById("yearFilter");
 const priceFilter = document.getElementById("priceFilter");
 const cars = document.querySelectorAll(".car-card-inv");
+
 function filterCars() {
 const searchText = searchInput.value.toLowerCase();
 const year = yearFilter.value;
 const price = priceFilter.value;
+
 cars.forEach(car => {
 const make = car.dataset.make.toLowerCase();
 const model = car.dataset.model.toLowerCase();
 const carYear = parseInt(car.dataset.year);
 const carPrice = parseInt(car.dataset.price);
+
 let visible = true;
+
 if (searchText && !(make.includes(searchText) || model.includes(searchText))) visible =
 false;
+
 if (year) {
 if (year === "2021older" && carYear > 2021) visible = false;
 else if (year !== "2021older" && carYear !== parseInt(year)) visible = false;
 }
+
 if (price) {
 if (price === "below20k" && carPrice >= 20000) visible = false;
 if (price === "20k-40k" && (carPrice < 20000 || carPrice > 40000)) visible = false;
@@ -790,17 +811,22 @@ if (price === "40k-70k" && (carPrice < 40000 || carPrice > 70000)) visible = fal
 if (price === "70k-100k" && (carPrice < 70000 || carPrice > 100000)) visible = false;
 if (price === "above100k" && carPrice <= 100000) visible = false;
 }
+
 car.style.display = visible ? "flex" : "none";
 });
 }
+
 searchInput.addEventListener("input", filterCars);
 yearFilter.addEventListener("change", filterCars);
 priceFilter.addEventListener("change", filterCars);
+
 // Display featured cars on page load
 function displayFeaturedCars() {
 const featuredContainer = document.querySelector('.featured-cars');
 const inventoryCars = document.querySelectorAll('.inventory .car-card-inv');
+
 featuredContainer.innerHTML = '';
+
 inventoryCars.forEach(car => {
 const make = car.dataset.make;
 const model = car.dataset.model;
@@ -809,6 +835,7 @@ const price = car.dataset.price;
 const image = car.querySelector('img').getAttribute('src');
 const carName = `${year} ${make} ${model}`;
 const carPriceFormatted = `$${parseInt(price).toLocaleString()}`;
+
 const cardHTML = `
 <div class="car-card" onclick="goToDetail('${carName}', '${year}', '${carPriceFormatted}',
 '${image}')">
@@ -823,6 +850,7 @@ featuredContainer.innerHTML += cardHTML;
 });
 }
 window.onload = displayFeaturedCars;
+
 // Newsletter form submission handling
 const newsletterForm = document.getElementById("newsletter-form");
 newsletterForm.addEventListener("submit", async (event) => {
@@ -848,6 +876,7 @@ showToast("An error occurred. Please check your connection.");
 console.error("Form submission error:", error);
 }
 });
+
 // Loan Simulator Logic
 const simulatorModal = document.getElementById('simulatorModal');
 const closeSimulatorBtn = document.getElementById('closeSimulator');
@@ -861,6 +890,7 @@ const summaryDiv = document.getElementById("summary");
 const totalDiv = document.getElementById("total");
 const monthlyPaymentDiv = document.getElementById("monthlyPayment");
 const tableBody = document.getElementById("tableBody");
+
 // Event listeners for loan buttons on car cards
 loanButtons.forEach(button => {
 button.addEventListener('click', (e) => {
@@ -870,6 +900,7 @@ simulatorModal.style.display = 'flex';
 calculate();
 });
 });
+
 // Event listeners for whatsapp buttons on car cards
 const whatsappButtons = document.querySelectorAll('.whatsapp-btn');
 whatsappButtons.forEach(button => {
@@ -883,16 +914,19 @@ const whatsappUrl = `https://wa.me/212720112372?text=${encodeURIComponent(messag
 window.open(whatsappUrl, '_blank');
 });
 });
+
 // Close simulator modal
 closeSimulatorBtn.addEventListener('click', () => {
 simulatorModal.style.display = 'none';
 });
+
 // Close if clicking outside simulator content
 simulatorModal.addEventListener('click', (e) => {
 if (e.target === simulatorModal) {
 simulatorModal.style.display = 'none';
 }
 });
+
 // Calculator function
 window.calculate = function() {
 const vehiclePrice = parseFloat(amountInput.value) || 0;
@@ -900,34 +934,43 @@ const annualRate = parseFloat(rateInput.value) / 100 || 0.05;
 const years = parseInt(yearsInput.value) || 5;
 const insurance = parseFloat(insuranceInput.value) || 0;
 const tax = parseFloat(taxInput.value) || 0;
+
 if (vehiclePrice <= 0 || years <= 0) {
 showToast("Please enter valid positive values for vehicle price and loan duration.");
 return;
 }
+
 const monthlyRate = annualRate / 12;
 const months = years * 12;
+
 let monthlyPayment;
 if (monthlyRate === 0) {
 monthlyPayment = vehiclePrice / months;
 } else {
 monthlyPayment = (vehiclePrice * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -months));
 }
+
 const totalMonthly = monthlyPayment + insurance;
 const totalVehiclePrice = vehiclePrice + tax;
+
 monthlyPaymentDiv.innerHTML = `Monthly Payment: $${totalMonthly.toFixed(2)}`;
 summaryDiv.innerHTML = `Vehicle Price (with taxes):<br>$${totalVehiclePrice.toFixed(2)}<br>Loan Duration: ${months} months`;
+
 let totalPrincipal = 0,
 totalInterest = 0,
 totalInsurance = insurance * months;
 tableBody.innerHTML = "";
 let balance = vehiclePrice;
+
 for (let i = 1; i <= months; i++) {
 const interest = balance * monthlyRate;
 const principal = monthlyPayment - interest;
 balance -= principal;
 if (balance < 0) balance = 0;
+
 totalPrincipal += principal;
 totalInterest += interest;
+
 tableBody.innerHTML += `
 <tr>
 <td>${i}</td>
@@ -938,7 +981,9 @@ tableBody.innerHTML += `
 </tr>
 `;
 }
+
 const grandTotal = totalPrincipal + totalInterest + totalInsurance + tax;
+
 totalDiv.innerHTML = `Principal Paid: $${totalPrincipal.toFixed(2)}<br>
 Interest Paid: $${totalInterest.toFixed(2)}<br>
 Insurance Paid: $${totalInsurance.toFixed(2)}<br>
